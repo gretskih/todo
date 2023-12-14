@@ -4,8 +4,9 @@ import lombok.AllArgsConstructor;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import ru.job4j.todo.model.Task;
 import ru.job4j.todo.service.TaskService;
 
 @ThreadSafe
@@ -32,5 +33,21 @@ public class IndexController {
     public String getIndexNew(Model model) {
         model.addAttribute("tasks", taskService.findAllNew());
         return "index";
+    }
+
+    @GetMapping("/create")
+    public String getCreationPage() {
+        return "create";
+    }
+
+    @PostMapping("/create")
+    public String create(@ModelAttribute Task task, Model model) {
+        try {
+            taskService.add(task);
+            return "redirect:/index";
+        } catch (Exception exception) {
+            model.addAttribute("message", exception.getMessage());
+            return "errors/404";
+        }
     }
 }
