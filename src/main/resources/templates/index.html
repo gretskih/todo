@@ -25,7 +25,7 @@
                 <tbody>
                 <tr th:each="task: ${tasks}">
                     <td>
-                        <a th:text="${task.title}" href="#"></a>
+                        <a th:text="${task.title}" th:href="@{/{taskId}(taskId=${task.id})}"></a>
                     </td>
                     <td th:text="${{task.created}}" />
                     <td th:text="${task.done}"/>

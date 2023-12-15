@@ -73,6 +73,7 @@ public class HbnTaskRepository implements TaskRepository {
                     .setParameter("fTitle", task.getTitle())
                     .setParameter("fDescription", task.getDescription())
                     .setParameter("fCreated", task.getCreated())
+                    .setParameter("fDone", task.isDone())
                     .setParameter("fId", id)
                     .executeUpdate() > 0;
             session.getTransaction().commit();
