@@ -28,9 +28,9 @@
             <div class="col-3"></div>
             <div class="col-6">
                 <div class="row">
-                    <div class="col-4"><a class="btn btn-info w-100" th:href="@{/done/{taskId}(taskId=${task.id})}">Выполнено</a></div>
-                    <div class="col-4"><a class="btn btn-info w-100" th:href="@{/edit/{taskId}(taskId=${task.id})}">Редактировать</a></div>
-                    <div class="col-4"><a class="btn btn-danger w-100" th:href="@{/delete/{taskId}(taskId=${task.id})}">Удалить</a></div>
+                    <div class="col-4"><a class="btn btn-info w-100" th:href="@{/tasks/done/{taskId}(taskId=${task.id})}">Выполнено</a></div>
+                    <div class="col-4"><a class="btn btn-info w-100" th:href="@{/tasks/edit/{taskId}(taskId=${task.id})}">Редактировать</a></div>
+                    <div class="col-4"><a class="btn btn-danger w-100" th:href="@{/tasks/delete/{taskId}(taskId=${task.id})}">Удалить</a></div>
                 </div>
             </div>
             <div class="col-3"></div>

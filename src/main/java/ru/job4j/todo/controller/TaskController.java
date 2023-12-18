@@ -11,8 +11,8 @@ import ru.job4j.todo.service.TaskService;
 @ThreadSafe
 @Controller
 @AllArgsConstructor
-@RequestMapping({"/", "/index"})
-public class IndexController {
+@RequestMapping({"/tasks"})
+public class TaskController {
 
     private TaskService taskService;
 
@@ -24,15 +24,12 @@ public class IndexController {
 
     @GetMapping("/done/{id}")
     public String setTaskDone(Model model, @PathVariable int id) {
-        var taskOptional = taskService.findById(id);
-        if (taskOptional.isEmpty()) {
-            model.addAttribute("message", "Задание с указанным идентификатором не найдено.");
+        boolean isReplaced = taskService.setDoneTrue(id);
+        if (!isReplaced) {
+            model.addAttribute("message", "Обновление завершилось ошибкой.");
             return "errors/404";
         }
-        Task task = taskOptional.get();
-        task.setDone(true);
-        taskService.replace(id, task);
-        return "redirect:/index";
+        return "redirect:/tasks";
     }
 
     @GetMapping("/completed")
@@ -54,13 +51,12 @@ public class IndexController {
 
     @PostMapping("/create")
     public String create(@ModelAttribute Task task, Model model) {
-        try {
-            taskService.add(task);
-            return "redirect:/index";
-        } catch (Exception exception) {
-            model.addAttribute("message", exception.getMessage());
+        var taskOptional = taskService.add(task);
+        if (taskOptional.isEmpty()) {
+            model.addAttribute("message", "Произошла ошибка. Задание не добавлено.");
             return "errors/404";
         }
+        return "redirect:/tasks";
     }
 
     @GetMapping("/{id}")
@@ -81,7 +77,7 @@ public class IndexController {
             model.addAttribute("message", "Задание с указанным идентификатором не найдено.");
             return "errors/404";
         }
-        return "redirect:/index";
+        return "redirect:/tasks";
     }
 
     @GetMapping("/edit/{id}")
@@ -102,7 +98,7 @@ public class IndexController {
             model.addAttribute("message", "Обновление завершилось ошибкой.");
             return "errors/404";
         }
-        return "redirect:/index";
+        return "redirect:/tasks";
     }
 
 }

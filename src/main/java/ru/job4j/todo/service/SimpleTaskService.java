@@ -16,7 +16,7 @@ public class SimpleTaskService implements TaskService {
     private final TaskRepository taskRepository;
 
     @Override
-    public Task add(Task task) {
+    public Optional<Task> add(Task task) {
         return taskRepository.add(task);
     }
 
@@ -31,6 +31,11 @@ public class SimpleTaskService implements TaskService {
     }
 
     @Override
+    public boolean setDoneTrue(int id) {
+        return taskRepository.setDoneTrue(id);
+    }
+
+    @Override
     public Optional<Task> findById(int id) {
         return taskRepository.findById(id);
     }
@@ -42,11 +47,11 @@ public class SimpleTaskService implements TaskService {
 
     @Override
     public Collection<Task> findAllDone() {
-        return findAll().stream().filter(Task::isDone).collect(Collectors.toList());
+        return taskRepository.findAllDone();
     }
 
     @Override
     public Collection<Task> findAllNew() {
-        return findAll().stream().filter(x -> !x.isDone()).collect(Collectors.toList());
+        return taskRepository.findAllNew();
     }
 }

@@ -7,11 +7,13 @@ import java.util.Optional;
 
 public interface TaskService {
 
-    Task add(Task task);
+    Optional<Task>  add(Task task);
 
     boolean deleteById(int id);
 
     boolean replace(int id, Task task);
+
+    boolean setDoneTrue(int id);
 
     Optional<Task> findById(int id);
 

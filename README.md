@@ -7,18 +7,18 @@
 
 ## Стек технологий
 - Java 17
-- Spring
-- Hibernate
-- Thymeleaf
-- Liquibase
-- PostgreSQL
-- Maven
-- Bootstrap
-- Lombok
+- Spring 2.7.3
+- Hibernate 5.6.11
+- Thymeleaf 3.0.15
+- Liquibase 4.15.0
+- PostgreSQL 42.2.9
+- Maven 4.0.0
+- Bootstrap 4.1.3
+- Lombok 1.18.22
 
 ## Окружение
 - Java 17
-- PostgreSQL 42.2.9
+- PostgreSQL 16
 - Apache Maven 4.0.0
 
 ## Запуск проекта
