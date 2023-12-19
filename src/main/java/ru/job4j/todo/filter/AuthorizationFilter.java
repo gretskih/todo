@@ -21,9 +21,9 @@ public class AuthorizationFilter extends HttpFilter {
             chain.doFilter(request, response);
             return;
         }
-        var userLoggedIn = request.getSession().getAttribute("user") != null;
+        var userLoggedIn = request.getSession().getAttribute("user") == null;
 
-        if (!userLoggedIn) {
+        if (userLoggedIn) {
             var loginPageUrl = request.getContextPath() + "/users/login";
             response.sendRedirect(loginPageUrl);
             return;
@@ -33,8 +33,6 @@ public class AuthorizationFilter extends HttpFilter {
 
     private boolean isAlwaysPermitted(String uri) {
         return uri.startsWith("/users/register")
-                || uri.startsWith("/users/login")
-                || uri.startsWith("/js")
-                || uri.startsWith("/css");
+                || uri.startsWith("/users/login");
     }
 }
