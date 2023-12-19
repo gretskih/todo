@@ -23,6 +23,7 @@ public class HbnUserRepository implements UserRepository {
             session.beginTransaction();
             session.save(userStore);
             session.getTransaction().commit();
+            return Optional.of(userStore);
         } catch (Exception e) {
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
@@ -31,20 +32,20 @@ public class HbnUserRepository implements UserRepository {
         } finally {
             session.close();
         }
-        return Optional.ofNullable(userStore);
+        return Optional.empty();
     }
 
     @Override
     public Optional<UserStore> findByLoginAndPassword(String login, String password) {
         Session session = sf.openSession();
-        Optional<UserStore> userStoreOptional = Optional.empty();
         try {
             session.beginTransaction();
             Query<UserStore> query = session.createQuery("from UserStore where login = :fLogin AND password = :fPassword", UserStore.class);
             query.setParameter("fLogin", login)
                     .setParameter("fPassword", password);
-            userStoreOptional = query.uniqueResultOptional();
+            Optional<UserStore> userStoreOptional = query.uniqueResultOptional();
             session.getTransaction().commit();
+            return userStoreOptional;
         } catch (Exception e) {
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
@@ -53,6 +54,6 @@ public class HbnUserRepository implements UserRepository {
         } finally {
             session.close();
         }
-        return userStoreOptional;
+        return Optional.empty();
     }
 }

@@ -22,6 +22,7 @@ public class HbnTaskRepository implements TaskRepository {
             session.beginTransaction();
             session.save(task);
             session.getTransaction().commit();
+            return Optional.of(task);
         } catch (Exception e) {
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
@@ -30,7 +31,7 @@ public class HbnTaskRepository implements TaskRepository {
         } finally {
             session.close();
         }
-        return Optional.ofNullable(task);
+        return Optional.empty();
     }
 
     @Override
@@ -108,13 +109,13 @@ public class HbnTaskRepository implements TaskRepository {
     @Override
     public Optional<Task> findById(int id) {
         Session session = sf.openSession();
-        Optional<Task> taskOptional = Optional.empty();
         try {
             session.beginTransaction();
             Query<Task> query = session.createQuery("from Task where id = :fId", Task.class);
             query.setParameter("fId", id);
-            taskOptional = query.uniqueResultOptional();
+            Optional<Task> taskOptional = query.uniqueResultOptional();
             session.getTransaction().commit();
+            return taskOptional;
         } catch (Exception e) {
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
@@ -123,18 +124,18 @@ public class HbnTaskRepository implements TaskRepository {
         } finally {
             session.close();
         }
-        return taskOptional;
+        return Optional.empty();
     }
 
     @Override
     public Collection<Task> findAll() {
         Session session = sf.openSession();
-        List<Task> taskList = Collections.emptyList();
         try {
             session.beginTransaction();
             Query<Task> query = session.createQuery("from Task task ORDER BY task.title", Task.class);
-            taskList = query.list();
+            List<Task> taskList = query.list();
             session.getTransaction().commit();
+            return taskList;
         } catch (Exception e) {
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
@@ -143,18 +144,18 @@ public class HbnTaskRepository implements TaskRepository {
         } finally {
             session.close();
         }
-        return taskList;
+        return Collections.emptyList();
     }
 
     @Override
     public Collection<Task> findAllDone() {
         Session session = sf.openSession();
-        List<Task> taskList = Collections.emptyList();
         try {
             session.beginTransaction();
             Query<Task> query = session.createQuery("from Task task where done = true ORDER BY task.title", Task.class);
-            taskList = query.list();
+            List<Task> taskList = query.list();
             session.getTransaction().commit();
+            return taskList;
         } catch (Exception e) {
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
@@ -163,18 +164,18 @@ public class HbnTaskRepository implements TaskRepository {
         } finally {
             session.close();
         }
-        return taskList;
+        return Collections.emptyList();
     }
 
     @Override
     public Collection<Task> findAllNew() {
         Session session = sf.openSession();
-        List<Task> taskList = Collections.emptyList();
         try {
             session.beginTransaction();
             Query<Task> query = session.createQuery("from Task task where done = false ORDER BY task.title", Task.class);
-            taskList = query.list();
+            List<Task> taskList = query.list();
             session.getTransaction().commit();
+            return taskList;
         } catch (Exception e) {
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
@@ -183,6 +184,6 @@ public class HbnTaskRepository implements TaskRepository {
         } finally {
             session.close();
         }
-        return taskList;
+        return Collections.emptyList();
     }
 }
