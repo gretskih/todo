@@ -7,7 +7,6 @@ import ru.job4j.todo.repository.TaskRepository;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
