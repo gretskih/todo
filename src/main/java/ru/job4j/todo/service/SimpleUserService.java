@@ -2,7 +2,7 @@ package ru.job4j.todo.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.job4j.todo.model.UserStore;
+import ru.job4j.todo.model.User;
 import ru.job4j.todo.repository.UserRepository;
 
 import java.util.Optional;
@@ -14,12 +14,12 @@ public class SimpleUserService implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public Optional<UserStore> save(UserStore userStore) {
-        return userRepository.save(userStore);
+    public Optional<User> save(User user) {
+        return userRepository.save(user);
     }
 
     @Override
-    public Optional<UserStore> findByLoginAndPassword(String login, String password) {
+    public Optional<User> findByLoginAndPassword(String login, String password) {
         return userRepository.findByLoginAndPassword(login, password);
     }
 }

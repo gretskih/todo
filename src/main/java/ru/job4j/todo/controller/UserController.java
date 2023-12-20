@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.job4j.todo.model.UserStore;
+import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,10 +28,10 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(Model model, @ModelAttribute UserStore userStore) {
-        var savedUser = userService.save(userStore);
+    public String register(Model model, @ModelAttribute User user) {
+        var savedUser = userService.save(user);
         if (savedUser.isEmpty()) {
-            model.addAttribute("error", "Пользователь с логином %s уже существует.".formatted(userStore.getLogin()));
+            model.addAttribute("error", "Пользователь с логином %s уже существует.".formatted(user.getLogin()));
             return "users/register";
         }
         return "redirect:/tasks";
@@ -43,8 +43,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String loginUser(@ModelAttribute UserStore userStore, Model model, HttpServletRequest request) {
-        var userStoreOptional = userService.findByLoginAndPassword(userStore.getLogin(), userStore.getPassword());
+    public String loginUser(@ModelAttribute User user, Model model, HttpServletRequest request) {
+        var userStoreOptional = userService.findByLoginAndPassword(user.getLogin(), user.getPassword());
         if (userStoreOptional.isEmpty()) {
             model.addAttribute("error", "Логин или пароль введены неверно");
             return "users/login";

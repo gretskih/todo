@@ -5,8 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
-import ru.job4j.todo.model.Task;
-import ru.job4j.todo.model.UserStore;
+import ru.job4j.todo.model.User;
 
 import java.util.Optional;
 
@@ -17,13 +16,13 @@ public class HbnUserRepository implements UserRepository {
     private final SessionFactory sf;
 
     @Override
-    public Optional<UserStore> save(UserStore userStore) {
+    public Optional<User> save(User user) {
         Session session = sf.openSession();
         try {
             session.beginTransaction();
-            session.save(userStore);
+            session.save(user);
             session.getTransaction().commit();
-            return Optional.of(userStore);
+            return Optional.of(user);
         } catch (Exception e) {
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
@@ -36,14 +35,14 @@ public class HbnUserRepository implements UserRepository {
     }
 
     @Override
-    public Optional<UserStore> findByLoginAndPassword(String login, String password) {
+    public Optional<User> findByLoginAndPassword(String login, String password) {
         Session session = sf.openSession();
         try {
             session.beginTransaction();
-            Query<UserStore> query = session.createQuery("from UserStore where login = :fLogin AND password = :fPassword", UserStore.class);
+            Query<User> query = session.createQuery("from User where login = :fLogin AND password = :fPassword", User.class);
             query.setParameter("fLogin", login)
                     .setParameter("fPassword", password);
-            Optional<UserStore> userStoreOptional = query.uniqueResultOptional();
+            Optional<User> userStoreOptional = query.uniqueResultOptional();
             session.getTransaction().commit();
             return userStoreOptional;
         } catch (Exception e) {
