@@ -30,8 +30,8 @@ public class CrudRepository {
             return tx(command);
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
+        return false;
     }
 
     public <T> Optional<T> optional(String query, Class<T> cl, Map<String, Object> args) {
@@ -47,8 +47,8 @@ public class CrudRepository {
             return tx(command);
         } catch (Exception e) {
             e.printStackTrace();
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     public <T> Optional<T> optional(Function<Session, T> command) {
@@ -68,8 +68,8 @@ public class CrudRepository {
             return tx(command);
         } catch (Exception e) {
             e.printStackTrace();
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 
     public <T> T tx(Function<Session, T> command) {
