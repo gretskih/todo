@@ -51,7 +51,8 @@ public class TaskController {
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute Task task, Model model) {
+    public String create(@ModelAttribute Task task, @SessionAttribute User user, Model model) {
+        task.setUser(user);
         var taskOptional = taskService.add(task);
         if (taskOptional.isEmpty()) {
             model.addAttribute("message", "Произошла ошибка. Задание не добавлено.");
