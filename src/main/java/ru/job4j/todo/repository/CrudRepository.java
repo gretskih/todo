@@ -17,6 +17,20 @@ import java.util.function.*;
 public class CrudRepository {
     private final SessionFactory sf;
 
+    public boolean booleanCall(Consumer<Session> command) {
+        try {
+            tx(session -> {
+                        command.accept(session);
+                        return null;
+                    }
+            );
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean booleanCall(String query, Map<String, Object> args) {
         Function<Session, Boolean> command = session -> {
             var sq = session
@@ -70,6 +84,18 @@ public class CrudRepository {
             e.printStackTrace();
         }
         return Collections.emptyList();
+    }
+
+    public <T> List<T> query(String query, Class<T> cl, Map<String, Object> args) {
+        Function<Session, List<T>> command = session -> {
+            var sq = session
+                    .createQuery(query, cl);
+            for (Map.Entry<String, Object> arg : args.entrySet()) {
+                sq.setParameter(arg.getKey(), arg.getValue());
+            }
+            return sq.list();
+        };
+        return tx(command);
     }
 
     public <T> T tx(Function<Session, T> command) {

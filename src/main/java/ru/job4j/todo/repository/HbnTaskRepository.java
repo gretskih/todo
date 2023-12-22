@@ -15,7 +15,7 @@ public class HbnTaskRepository implements TaskRepository {
     @Override
     public Optional<Task> add(Task task) {
         return crudRepository.optional(session -> {
-            session.save(task);
+            session.persist(task);
             return task;
         });
     }
@@ -29,18 +29,8 @@ public class HbnTaskRepository implements TaskRepository {
     }
 
     @Override
-    public boolean replace(int id, Task task) {
-        return crudRepository.booleanCall(
-                "UPDATE Task SET title = :fTitle"
-                        + ", description = :fDescription"
-                        + ", done = :fDone "
-                        + ", priority = :fPriority"
-                        + " WHERE id = :fId",
-                Map.of("fTitle", task.getTitle(),
-                        "fDescription", task.getDescription(),
-                        "fDone", task.isDone(),
-                        "fPriority", task.getPriority(),
-                        "fId", id)
+    public boolean replace(Task task) {
+        return crudRepository.booleanCall(session -> session.merge(task)
         );
     }
 
@@ -56,7 +46,10 @@ public class HbnTaskRepository implements TaskRepository {
     @Override
     public Optional<Task> findById(int id) {
         return crudRepository.optional(
-                "from Task task JOIN FETCH task.priority where task.id = :fId", Task.class,
+                "from Task task "
+                        + "LEFT JOIN FETCH task.priority "
+                        + "LEFT JOIN FETCH task.categories "
+                        + "where task.id = :fId", Task.class,
                 Map.of("fId", id)
         );
     }
