@@ -33,10 +33,13 @@ public class HbnTaskRepository implements TaskRepository {
         return crudRepository.booleanCall(
                 "UPDATE Task SET title = :fTitle"
                         + ", description = :fDescription"
-                        + ", done = :fDone WHERE id = :fId",
+                        + ", done = :fDone "
+                        + ", priority = :fPriority"
+                        + " WHERE id = :fId",
                 Map.of("fTitle", task.getTitle(),
                         "fDescription", task.getDescription(),
                         "fDone", task.isDone(),
+                        "fPriority", task.getPriority(),
                         "fId", id)
         );
     }
@@ -53,7 +56,7 @@ public class HbnTaskRepository implements TaskRepository {
     @Override
     public Optional<Task> findById(int id) {
         return crudRepository.optional(
-                "from Task where id = :fId", Task.class,
+                "from Task task JOIN FETCH task.priority where task.id = :fId", Task.class,
                 Map.of("fId", id)
         );
     }
@@ -61,14 +64,14 @@ public class HbnTaskRepository implements TaskRepository {
     @Override
     public Collection<Task> findAll() {
         return crudRepository.query(
-                "from Task task ORDER BY task.title", Task.class
+                "from Task task JOIN FETCH task.priority ORDER BY task.title", Task.class
         );
     }
 
     @Override
     public Collection<Task> findAllDone() {
         return crudRepository.query(
-                "from Task task where done = true ORDER BY task.title",
+                "from Task task JOIN FETCH task.priority where done = true ORDER BY task.title",
                 Task.class
         );
     }
@@ -76,7 +79,7 @@ public class HbnTaskRepository implements TaskRepository {
     @Override
     public Collection<Task> findAllNew() {
         return crudRepository.query(
-                "from Task task where done = false ORDER BY task.title",
+                "from Task task JOIN FETCH task.priority where done = false ORDER BY task.title",
                 Task.class
         );
     }
