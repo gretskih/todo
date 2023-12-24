@@ -38,4 +38,9 @@ public class SimpleUserService implements UserService {
         }
         return timeZones;
     }
+
+    @Override
+    public String getDefaultTimeZone() {
+        return TimeZone.getDefault().getID();
+    }
 }

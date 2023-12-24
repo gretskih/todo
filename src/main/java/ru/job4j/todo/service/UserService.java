@@ -11,4 +11,6 @@ public interface UserService {
     Optional<User> findByLoginAndPassword(String login, String password);
 
     List<String> getTimeZones();
+
+    String getDefaultTimeZone();
 }
