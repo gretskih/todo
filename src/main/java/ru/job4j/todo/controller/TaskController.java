@@ -95,6 +95,7 @@ public class TaskController {
     public String edit(Model model, @PathVariable int id) {
         var taskOptional = taskService.findById(id);
         model.addAttribute("priorities", priorityService.findAll());
+        model.addAttribute("categories", categoryService.findAll());
         if (taskOptional.isEmpty()) {
                 model.addAttribute("message", "Задание с указанным идентификатором не найдено.");
                 return "errors/404";
@@ -104,8 +105,9 @@ public class TaskController {
     }
 
     @PostMapping("/update")
-    public String update(Task task, Model model) {
-        boolean isReplaced = taskService.replace(task.getId(), task);
+    public String update(Task task, @RequestParam List<Integer> categoriesId, Model model) {
+        task.setCategories(categoryService.findByListId(categoriesId));
+        boolean isReplaced = taskService.replace(task);
         if (!isReplaced) {
             model.addAttribute("message", "Обновление завершилось ошибкой.");
             return "errors/404";
