@@ -11,6 +11,7 @@ import ru.job4j.todo.service.CategoryService;
 import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 
+import java.util.HashSet;
 import java.util.List;
 
 @ThreadSafe
@@ -24,8 +25,8 @@ public class TaskController {
     private CategoryService categoryService;
 
     @GetMapping
-    public String getIndex(Model model) {
-        model.addAttribute("tasks", taskService.findAll());
+    public String getIndex(Model model, @SessionAttribute User user) {
+        model.addAttribute("tasks", taskService.findAll(user));
         return "index";
     }
 
@@ -40,14 +41,14 @@ public class TaskController {
     }
 
     @GetMapping("/completed")
-    public String getIndexDone(Model model) {
-        model.addAttribute("tasks", taskService.findAllDone());
+    public String getIndexDone(Model model, @SessionAttribute User user) {
+        model.addAttribute("tasks", taskService.findAllDone(user));
         return "index";
     }
 
     @GetMapping("/new")
-    public String getIndexNew(Model model) {
-        model.addAttribute("tasks", taskService.findAllNew());
+    public String getIndexNew(Model model, @SessionAttribute User user) {
+        model.addAttribute("tasks", taskService.findAllNew(user));
         return "index";
     }
 
@@ -71,8 +72,8 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public String getById(Model model, @PathVariable int id) {
-        var taskOptional = taskService.findById(id);
+    public String getById(Model model, @PathVariable int id, @SessionAttribute User user) {
+        var taskOptional = taskService.findById(id, user);
         if (taskOptional.isEmpty()) {
             model.addAttribute("message", "Задание с указанным идентификатором не найдено.");
             return "errors/404";

@@ -7,6 +7,7 @@ import ru.job4j.todo.repository.CategoryRepository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -15,12 +16,12 @@ public class SimpleCategoryService implements CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public Collection<Category> findAll() {
+    public Set<Category> findAll() {
         return categoryRepository.findAll();
     }
 
     @Override
-    public List<Category> findByListId(List<Integer> idList) {
+    public Set<Category> findByListId(List<Integer> idList) {
         return categoryRepository.findByListId(idList);
     }
 }

@@ -16,4 +16,6 @@
     <include file="scripts/009_dml_insert_categories.sql" relativeToChangelogFile="true"/>
     <include file="scripts/010_ddl_create_participates_table.sql" relativeToChangelogFile="true"/>
     <include file="scripts/011_ddl_add_column_user_zone_to_user_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/012_ddl_drop_column_created_tasks_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/013_ddl_add_column_created_without_time_zone_tasks_table.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

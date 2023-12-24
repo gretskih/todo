@@ -4,8 +4,9 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.ZoneId;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -20,7 +21,7 @@ public class Task {
     private int id;
     private String title;
     private String description;
-    private LocalDateTime created = LocalDateTime.now();
+    private LocalDateTime created = LocalDateTime.now(ZoneId.of("UTC"));
     private boolean done;
 
     @ManyToOne
@@ -37,5 +38,5 @@ public class Task {
             joinColumns =  @JoinColumn(name = "task_id"),
             inverseJoinColumns =  @JoinColumn(name = "category_id")
     )
-    private List<Category> categories = new ArrayList<>();
+    private Set<Category> categories = new HashSet<>();
 }
